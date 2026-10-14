@@ -1,0 +1,1059 @@
+{
+ "slug": "translation-token-audit",
+ "module": "translation-token-audit/src/audit",
+ "function": "audit",
+ "cases": [
+  {
+   "name": "Named brace token passes",
+   "args": [
+    "Hello {name}.",
+    "Bonjour {name}."
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{name}"
+      ],
+      "targetTokens": [
+       "{name}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Renamed brace reports missing and added",
+   "args": [
+    "{name}",
+    "{names}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "{name}",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "{names}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{name}"
+      ],
+      "targetTokens": [
+       "{names}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Repeated token loses one occurrence",
+   "args": [
+    "{n} {n}",
+    "{n}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "{n}",
+        "count": 1
+       }
+      ],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{n}",
+       "{n}"
+      ],
+      "targetTokens": [
+       "{n}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Unnumbered printf order changes",
+   "args": [
+    "%s has %d",
+    "%d pour %s"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [],
+      "added": [],
+      "orderMismatch": true,
+      "unsupported": [],
+      "sourceTokens": [
+       "%s",
+       "%d"
+      ],
+      "targetTokens": [
+       "%d",
+       "%s"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Numbered printf tokens can move",
+   "args": [
+    "%1$s %2$d",
+    "%2$d %1$s"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "%1$s",
+       "%2$d"
+      ],
+      "targetTokens": [
+       "%2$d",
+       "%1$s"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Named printf reports changed name",
+   "args": [
+    "%(detail)s",
+    "%(details)s"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "%(detail)s",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "%(details)s",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "%(detail)s"
+      ],
+      "targetTokens": [
+       "%(details)s"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Escaped percent has no tokens",
+   "args": [
+    "100%%",
+    "100%%"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Double brace is one token",
+   "args": [
+    "{{name}}",
+    "{{name}}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{{name}}"
+      ],
+      "targetTokens": [
+       "{{name}}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Different line counts stop comparison",
+   "args": [
+    "a\nb",
+    "a"
+   ],
+   "expected": {
+    "sourceLines": 2,
+    "targetLines": 1,
+    "error": "Line count differs: source 2, target 1. No units compared.",
+    "lines": []
+   }
+  },
+  {
+   "name": "Nested ICU is unsupported",
+   "args": [
+    "{n, plural, one {item} other {items}}",
+    "{n}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [
+       {
+        "token": "{n}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: {n, plural, one {item} other {items}}"
+      ],
+      "sourceTokens": [],
+      "targetTokens": [
+       "{n}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Apple token is unsupported",
+   "args": [
+    "%@",
+    "%@"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: %@",
+       "Target: %@"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Changed numbered type is reported",
+   "args": [
+    "%1$s",
+    "%1$d"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "%1$s",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "%1$d",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "%1$s"
+      ],
+      "targetTokens": [
+       "%1$d"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Extra repeated brace is reported",
+   "args": [
+    "{x}",
+    "{x} {x}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [],
+      "added": [
+       {
+        "token": "{x}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{x}"
+      ],
+      "targetTokens": [
+       "{x}",
+       "{x}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Brace tokens can move",
+   "args": [
+    "{x} {y}",
+    "{y} {x}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{x}",
+       "{y}"
+      ],
+      "targetTokens": [
+       "{y}",
+       "{x}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Brace names keep case",
+   "args": [
+    "{Name}",
+    "{name}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "{Name}",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "{name}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{Name}"
+      ],
+      "targetTokens": [
+       "{name}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Single and double braces differ",
+   "args": [
+    "{name}",
+    "{{name}}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "{name}",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "{{name}}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{name}"
+      ],
+      "targetTokens": [
+       "{{name}}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Named printf tokens can move",
+   "args": [
+    "%(x)s %(y)s",
+    "%(y)s %(x)s"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "%(x)s",
+       "%(y)s"
+      ],
+      "targetTokens": [
+       "%(y)s",
+       "%(x)s"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Named printf integer is unsupported",
+   "args": [
+    "%(n)d",
+    "%(n)d"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: %(n)d",
+       "Target: %(n)d"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Printf widths are unsupported",
+   "args": [
+    "%02d",
+    "%02d"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: %02d",
+       "Target: %02d"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Unknown printf type is unsupported",
+   "args": [
+    "%f",
+    "%f"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: %f",
+       "Target: %f"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Unclosed brace is unsupported",
+   "args": [
+    "Hello {name",
+    "Bonjour {name"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: {name",
+       "Target: {name"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Closing brace alone is unsupported",
+   "args": [
+    "x}",
+    "x}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: }",
+       "Target: }"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Core rejects dollar braces",
+   "args": [
+    "${name}",
+    "${name}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: ${name}",
+       "Target: ${name}"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Dollar grammar passes matching names",
+   "args": [
+    "${name}",
+    "${name}",
+    "dollar"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "${name}"
+      ],
+      "targetTokens": [
+       "${name}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Dollar grammar reports changed names",
+   "args": [
+    "${name}",
+    "${user}",
+    "dollar"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "${name}",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "${user}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "${name}"
+      ],
+      "targetTokens": [
+       "${user}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Dollar and ordinary braces stay distinct",
+   "args": [
+    "${name}",
+    "{name}",
+    "dollar"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "${name}",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "{name}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "${name}"
+      ],
+      "targetTokens": [
+       "{name}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Dollar grammar rejects nested braces",
+   "args": [
+    "${a{b}}",
+    "${a{b}}",
+    "dollar"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: ${a{b}}",
+       "Target: ${a{b}}"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Blank interior units retain line numbers",
+   "args": [
+    "{a}\n\n{b}\n",
+    "{a}\n\n{c}\n"
+   ],
+   "expected": {
+    "sourceLines": 3,
+    "targetLines": 3,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{a}"
+      ],
+      "targetTokens": [
+       "{a}"
+      ]
+     },
+     {
+      "line": 2,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [],
+      "targetTokens": []
+     },
+     {
+      "line": 3,
+      "status": "mismatch",
+      "missing": [
+       {
+        "token": "{b}",
+        "count": 1
+       }
+      ],
+      "added": [
+       {
+        "token": "{c}",
+        "count": 1
+       }
+      ],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{b}"
+      ],
+      "targetTokens": [
+       "{c}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "CRLF and final newline agree",
+   "args": [
+    "{a}\r\n{b}\r\n",
+    "{a}\n{b}"
+   ],
+   "expected": {
+    "sourceLines": 2,
+    "targetLines": 2,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{a}"
+      ],
+      "targetTokens": [
+       "{a}"
+      ]
+     },
+     {
+      "line": 2,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{b}"
+      ],
+      "targetTokens": [
+       "{b}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Empty notes have zero units",
+   "args": [
+    "",
+    ""
+   ],
+   "expected": {
+    "sourceLines": 0,
+    "targetLines": 0,
+    "error": "",
+    "lines": []
+   }
+  },
+  {
+   "name": "Percent before a space is plain text",
+   "args": [
+    "Save 20% today",
+    "Economisez 20% ici"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Names can use dots and hyphens",
+   "args": [
+    "{user.first-name}",
+    "{user.first-name}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "{user.first-name}"
+      ],
+      "targetTokens": [
+       "{user.first-name}"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "Numeric braces are unsupported",
+   "args": [
+    "{0}",
+    "{0}"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "unsupported",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [
+       "Source: {0}",
+       "Target: {0}"
+      ],
+      "sourceTokens": [],
+      "targetTokens": []
+     }
+    ]
+   }
+  },
+  {
+   "name": "Escaped percent before token stays separate",
+   "args": [
+    "%%%s",
+    "%%%s"
+   ],
+   "expected": {
+    "sourceLines": 1,
+    "targetLines": 1,
+    "error": "",
+    "lines": [
+     {
+      "line": 1,
+      "status": "pass",
+      "missing": [],
+      "added": [],
+      "orderMismatch": false,
+      "unsupported": [],
+      "sourceTokens": [
+       "%s"
+      ],
+      "targetTokens": [
+       "%s"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

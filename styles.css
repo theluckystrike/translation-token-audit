@@ -1,0 +1,46 @@
+.tta-results {
+ max-height: 65vh;
+ overflow-y: auto;
+}
+
+.tta-line {
+ border: 1px solid var(--background-modifier-border);
+ border-left: 4px solid var(--text-muted);
+ border-radius: var(--radius-s);
+ margin: 12px 0;
+ padding: 12px;
+}
+
+.tta-mismatch,
+.tta-unsupported {
+ border-left-color: var(--text-warning);
+}
+
+.tta-pass {
+ border-left-color: var(--text-success);
+}
+
+.tta-line p {
+ margin: 6px 0;
+}
+
+.tta-tokens {
+ color: var(--text-muted);
+ font-family: var(--font-monospace);
+ font-size: var(--font-smallest);
+ white-space: pre-wrap;
+ overflow-wrap: anywhere;
+}
+
+.tta-error {
+ color: var(--text-warning);
+}
+
+.tta-input textarea {
+ min-height: 100px;
+ width: 100%;
+}
+
+.tta-pair h3 {
+ overflow-wrap: anywhere;
+}

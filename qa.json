@@ -1,0 +1,63 @@
+[
+  {
+    "feature": "choose-notes",
+    "caption": "Choose source and target sample notes.",
+    "note": "Source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.signOut();p.settings.source='Translation Token Audit/Source.md';p.settings.target='Translation Token Audit/Target.md';p.showAudit();return 'ok';})()"
+  },
+  {
+    "feature": "supported-tokens",
+    "caption": "Named, double-brace and numbered tokens pass.",
+    "note": "Supported source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.signOut();const pair={source:\"Translation Token Audit/Supported source.md\",target:\"Translation Token Audit/Supported target.md\"};const r=await p.checkPair(pair,\"core\");p.showReports([r],\"core\");return 'ok';})()"
+  },
+  {
+    "feature": "mismatches",
+    "caption": "Review name, count and unnumbered order differences.",
+    "note": "Target.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.signOut();const pair={source:\"Translation Token Audit/Source.md\",target:\"Translation Token Audit/Target.md\"};const r=await p.checkPair(pair,\"core\");p.showReports([r],\"core\");return 'ok';})()"
+  },
+  {
+    "feature": "unsupported-syntax",
+    "caption": "Nested ICU and Apple tokens need review.",
+    "note": "Unsupported source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.signOut();const pair={source:\"Translation Token Audit/Unsupported source.md\",target:\"Translation Token Audit/Unsupported target.md\"};const r=await p.checkPair(pair,\"core\");p.showReports([r],\"core\");return 'ok';})()"
+  },
+  {
+    "feature": "folder-pairs",
+    "caption": "Declare two source and target pairs in a folder with simulated Pro.",
+    "note": "Source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.opts.http=async()=>({status:200,json:{data:{viewer:{login:'demo-reader'},user:{sponsorshipForViewerAsSponsor:{isActive:true,isOneTimePayment:false,tier:{name:'$5 a month',monthlyPriceInCents:500}}}}}});app.secretStorage.setSecret('translation-token-audit-github-token','gho_'+'0'.repeat(36));await p.pro.refreshNow();const declarations=\"Translation Token Audit/Source.md | Translation Token Audit/Target.md\\nTranslation Token Audit/Supported source.md | Translation Token Audit/Supported target.md\";p.settings.folder='Translation Token Audit';p.settings.declarations=declarations;p.showAudit(true);return 'ok';})()",
+    "after": "app.plugins.plugins['translation-token-audit'].pro.signOut(); 'ok'"
+  },
+  {
+    "feature": "dollar-grammar",
+    "caption": "The Pro grammar compares dollar-brace names.",
+    "note": "Dollar source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.opts.http=async()=>({status:200,json:{data:{viewer:{login:'demo-reader'},user:{sponsorshipForViewerAsSponsor:{isActive:true,isOneTimePayment:false,tier:{name:'$5 a month',monthlyPriceInCents:500}}}}}});app.secretStorage.setSecret('translation-token-audit-github-token','gho_'+'0'.repeat(36));await p.pro.refreshNow();const pair={source:\"Translation Token Audit/Dollar source.md\",target:\"Translation Token Audit/Dollar target.md\"};const r=await p.checkPair(pair,\"dollar\");p.showReports([r],\"dollar\");return 'ok';})()",
+    "after": "app.plugins.plugins['translation-token-audit'].pro.signOut(); 'ok'"
+  },
+  {
+    "feature": "translation-token-audit",
+    "caption": "Choose notes, review results and open the target line.",
+    "frames": [
+      {
+        "note": "Source.md",
+        "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.signOut();p.settings.source='Translation Token Audit/Source.md';p.settings.target='Translation Token Audit/Target.md';p.showAudit();return 'ok';})()",
+        "hold": 1400
+      },
+      {
+        "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();p.pro.signOut();const pair={source:\"Translation Token Audit/Source.md\",target:\"Translation Token Audit/Target.md\"};const r=await p.checkPair(pair,\"core\");p.showReports([r],\"core\");return 'ok';})()",
+        "hold": 1800
+      },
+      {
+        "eval": "document.querySelector('.tta-results').scrollTop = document.querySelector('.tta-results').scrollHeight; 'ok'",
+        "hold": 1800
+      },
+      {
+        "eval": "(async()=>{const p=app.plugins.plugins['translation-token-audit']; for(const m of [...p.modals]) m.close();await p.openTarget('Translation Token Audit/Target.md',3);return 'ok';})()",
+        "hold": 1400
+      }
+    ]
+  }
+]
