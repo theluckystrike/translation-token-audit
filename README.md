@@ -1,6 +1,6 @@
 # Translation Token Audit
 
-Translation Token Audit compares placeholders in two notes. Put the source strings in one note and the translated strings in another. Keep one translation unit per physical line. The report shows missing tokens, added tokens, changed types and unnumbered printf order differences. Select a result to open that line in the target editor.
+Translation Token Audit compares placeholders in two notes. Put the source strings in one note and the translated strings in another. Keep one translation unit per physical line. The report shows missing tokens, added tokens, changed types and unnumbered printf order differences.
 
 The free check reads local Markdown notes. It does not change their text. Use it when you review strings before you copy them into an application. A passed line means that the supported tokens match. It does not show whether the translation is correct or whether the application can render the string.
 
@@ -67,6 +67,8 @@ Run the pair command, choose both notes and check tokens. Review the rows that n
 One terminal newline is treated as a file terminator. Blank lines inside the file are units. CRLF and CR line endings become LF before comparison. If line counts differ, the report gives both counts and compares zero units. Correct the alignment first. This prevents an inserted unit from shifting the remaining comparisons.
 
 ## Settings
+
+After a minor or major update, this plugin opens one What's new tab in the background. The tab and settings card suggest other NoteMods plugins and Zovo Chat and link to notemods.com for feedback ([privacy](https://notemods.com/privacy/)). The tab sends no data. Turn the tab off in Settings.
 
 The settings tab shows the local check description and the GitHub Sponsors controls. Note selection, folder declarations and grammar selection are in the check dialog. The grammar starts as core when you open a new dialog. Selected note paths and completed folder inputs are stored in the vault's plugin data. Report rows are not stored there.
 

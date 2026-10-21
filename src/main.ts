@@ -5,6 +5,8 @@ import { audit, inFolder, parsePairs, type AuditResult, type Grammar, type Pair 
 import { SPONSORS, bindPro, isPro, resetPro } from './pro';
 import { DEFAULT_SETTINGS, TranslationTokenAuditSettingTab, normalizeSettings, type AuditSettings } from './settings';
 import { AuditModal, ResultModal } from './ui';
+import { setupHello } from './hello/index';
+import WHATS_NEW from './whats-new.json';
 
 export interface PairReport { pair: Pair; result: AuditResult | null; error: string }
 export default class TranslationTokenAuditPlugin extends Plugin {
@@ -12,6 +14,8 @@ export default class TranslationTokenAuditPlugin extends Plugin {
  pro: SponsorsManager | null = null;
  readonly modals = new Set<Modal>();
  async onload(): Promise<void> {
+   // First: "What's new" reads its state before the settings load (packages/hello). It does not wait.
+   setupHello(this, WHATS_NEW);
   this.settings = normalizeSettings(await this.loadData() as unknown);
   const pro = createGitHubSponsors(this.app, this.manifest.id, SPONSORS, this);
   pro.init(); this.pro = pro; bindPro(pro);
