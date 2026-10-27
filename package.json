@@ -1,6 +1,6 @@
 {
 	"name": "translation-token-audit",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"private": true,
 	"description": "Find missing, added, or changed placeholders in translated line pairs.",
 	"main": "main.js",

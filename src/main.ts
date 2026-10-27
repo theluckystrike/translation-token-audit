@@ -2,7 +2,7 @@ import { FuzzySuggestModal, MarkdownView, Modal, Notice, Plugin, TFile, normaliz
 import type { SponsorsManager } from './license/index';
 import { createGitHubSponsors } from './license/github-obsidian';
 import { audit, inFolder, parsePairs, type AuditResult, type Grammar, type Pair } from './audit';
-import { SPONSORS, bindPro, isPro, resetPro } from './pro';
+import { SPONSORS, bindPro, isPro, resetPro, proNotice, proText } from './pro';
 import { DEFAULT_SETTINGS, TranslationTokenAuditSettingTab, normalizeSettings, type AuditSettings } from './settings';
 import { AuditModal, ResultModal } from './ui';
 import { setupHello } from './hello/index';
@@ -34,7 +34,7 @@ export default class TranslationTokenAuditPlugin extends Plugin {
  onunload(): void { for (const modal of [...this.modals]) modal.close(); resetPro(); }
  requirePro(): boolean {
   if (isPro()) return true;
-  new Notice('This is a pro feature. Sponsor on GitHub, then sign in from the plugin settings.');
+  proNotice('This is a pro feature.');
   return false;
  }
  async saveSettings(): Promise<void> { await this.saveData(this.settings); }
@@ -63,7 +63,7 @@ export default class TranslationTokenAuditPlugin extends Plugin {
   if (pairs.some(p => !inFolder(p.source, root) || !inFolder(p.target, root))) throw new Error('A declared note is outside the selected folder. No pairs checked.');
   const reports: PairReport[] = [];
   for (const pair of pairs) {
-   if (!isPro()) throw new Error('Pro is off. Run the folder check after sign in.');
+   if (!isPro()) throw new Error(proText('Pro is off. The folder check stopped.'));
    reports.push(await this.checkPair(pair, grammar));
   }
   return reports;

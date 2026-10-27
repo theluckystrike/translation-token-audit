@@ -1,5 +1,11 @@
 # translation-token-audit
 
+## 1.1.1
+
+### Patch Changes
+
+- The Translation Token Audit notice for a Pro feature now has a Sponsor on GitHub button.
+
 ## 1.1.0
 
 ### Minor Changes
