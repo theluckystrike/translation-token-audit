@@ -2,7 +2,7 @@
 
 Translation Token Audit compares placeholders in two notes. Put the source strings in one note and the translated strings in another. Keep one translation unit per physical line. The report shows missing tokens, added tokens, changed types and unnumbered printf order differences.
 
-The free check reads local Markdown notes. It does not change their text. Use it when you review strings before you copy them into an application. A passed line means that the supported tokens match. It does not show whether the translation is correct or whether the application can render the string.
+The free check reads local Markdown notes. It does not change their text. Use it to review strings before you copy them into an application. A passed line means that the supported tokens match. It does not show whether the translation is correct or whether the application can render the string.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/translation-token-audit/HEAD/docs/translation-token-audit.gif" alt="Choose notes, check token differences and open a target line" width="720">
 
@@ -83,6 +83,8 @@ What was not tested? Physical Android and iOS devices, Linux app sessions, custo
 ## Payment, account and network
 
 The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
+
+[One payment turns on Pro in every NoteMods plugin](https://notemods.com/pro/).
 
 GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=translation-token-audit. You need no account for the free features. Pro needs the GitHub account that sponsors.
 
